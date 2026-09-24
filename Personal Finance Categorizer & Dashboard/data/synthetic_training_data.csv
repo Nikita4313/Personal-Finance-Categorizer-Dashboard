@@ -1,0 +1,25 @@
+description,category
+SWIGGY order,Food
+Zomato dinner,Food
+Local restaurant,Food
+BigBasket groceries,Groceries
+Supermarket purchase,Groceries
+Organic market groceries,Groceries
+Fresh vegetables market,Groceries
+Local grocery store,Groceries
+Uber ride,Transport
+Metro card recharge,Transport
+Petrol station,Transport
+Monthly rent payment,Rent
+Electricity bill,Bills & Utilities
+Internet broadband bill,Bills & Utilities
+Netflix subscription,Entertainment
+Cinema tickets,Entertainment
+Amazon online order,Shopping
+Flipkart purchase,Shopping
+Monthly salary credit,Income
+Freelance salary payment,Income
+Pharmacy medicine,Healthcare
+Doctor clinic visit,Healthcare
+Bank fee,Fees & Charges
+ATM cash withdrawal,Cash Withdrawal

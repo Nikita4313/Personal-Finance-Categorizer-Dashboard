@@ -1,0 +1,45 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ledgerline | Personal Finance</title>
+  <link rel="stylesheet" href="{% static 'transactions/styles.css' %}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PERSONAL FINANCE / {{ current_month }}</p>
+        <h1>Know where your money goes.</h1>
+      </div>
+      <form class="upload" action="{% url 'upload_statement' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="file-label" for="statement">Choose CSV</label>
+        <input id="statement" name="statement" type="file" accept=".csv" required>
+        <button type="submit">Import statement</button>
+      </form>
+    </header>
+
+    {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}
+
+    <section class="metrics" aria-label="Monthly summary">
+      <article class="metric metric-main"><span>Spent this month</span><strong>₹{{ total_spending|floatformat:2 }}</strong><small>Negative amounts only</small></article>
+      <article class="metric"><span>Transactions</span><strong>{{ transaction_count }}</strong><small>All imported records</small></article>
+      <article class="metric"><span>Categories</span><strong>{{ category_totals|length }}</strong><small>With spending activity</small></article>
+    </section>
+
+    <section class="charts">
+      <article class="panel chart-panel"><div class="panel-heading"><h2>Spending map</h2><span>BAR / MONTHLY</span></div><img src="{% url 'chart' 'bar' %}" alt="Bar chart of spending by category"></article>
+      <article class="panel chart-panel"><div class="panel-heading"><h2>Share of spend</h2><span>PIE / MONTHLY</span></div><img src="{% url 'chart' 'pie' %}" alt="Pie chart of spending by category"></article>
+    </section>
+
+    <section class="panel table-panel"><div class="panel-heading"><h2>Transaction ledger</h2><span>{{ transaction_count }} ROWS</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Method</th><th class="amount">Amount</th></tr></thead><tbody>
+      {% for transaction in transactions %}<tr><td>{{ transaction.date|date:"d M Y" }}</td><td class="description">{{ transaction.description }}</td><td><span class="category">{{ transaction.category }}</span></td><td><span class="method method-{{ transaction.source }}">{{ transaction.source }}</span></td><td class="amount {% if transaction.amount < 0 %}debit{% else %}credit{% endif %}">{% if transaction.amount > 0 %}+{% endif %}₹{{ transaction.amount|floatformat:2 }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">Upload a CSV statement to populate your ledger.</td></tr>{% endfor %}
+      </tbody></table></div>
+    </section>
+  </main>
+</body>
+</html>
